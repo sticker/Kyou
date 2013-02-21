@@ -8,23 +8,30 @@ use Data::Dumper;
 use Web::Scraper;
 use URI;
 use JSON;
+use Data::Structure::Util qw(unbless);
+use Encode;
 
 my $scraper = scraper {
-    process 'div.description>a>img', 'photo[]' => '@src';
-    process 'div.description>a>img', 'title[]' => '@title';
-    process 'div.description>a', 'url[]' => '@href';
+    process 'div.description', 'result[]' => scraper {
+        process 'a', 'url' => [ '@href', sub { $_->as_string } ];
+        process 'a>img', 'image' => [ '@src', sub{ $_->as_string } ],
+                       'title' => '@title';
+    };
 };
 
 my $uri = new URI('http://www.officiallyjd.com/');
 
 my $res = $scraper->scrape($uri);
 
-print Dump $res;
+#print Dumper $res;
+#print "===============================\n\n";
 
-#my $json = '[';
-#$json .= (JSON->new->encode($res).', ');
 
-#$json =~ s/,.$//s; #最後のカンマを除去
-#$json .= ']';  #JSONハッシュ配列の閉じ
+my $json = new JSON;
 
-#print $json;
+my $json_text = '[';
+$json_text .= $json->encode($res->{result}).', ';
+$json_text =~ s/,.$//s; #最後のカンマを除去
+$json_text .= ']';  #JSONハッシュ配列の閉じ
+
+print utf8::is_utf8($json_text) ? encode('utf-8', $json_text) : $json_text;
