@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <string name="app_name">Kyou</string>
+    <string name="menu_settings">Settings</string>
+    <string name="btn_download">Download</string>
+    <string name="btn_draw">表示する</string>
+    
+    <string name="txt_dokujo">sample</string>
+
+</resources>
