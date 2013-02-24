@@ -22,6 +22,7 @@ import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.BinaryHttpResponseHandler;
 
 import jp.dip.tetsuc5.kyou.bean.Dokujo;
+import jp.dip.tetsuc5.kyou.bean.Girlmen;
 import jp.dip.tetsuc5.kyou.util.Constants;
 import jp.dip.tetsuc5.kyou.util.FileUtil;
 import jp.dip.tetsuc5.kyou.util.MyAsyncHttpClient;
@@ -41,13 +42,13 @@ import android.widget.TextView;
 /**
  * HTTPサーバからファイルをレジュームダウンロードするサンプル.
  */
-public class DokujoDownloadActivity extends Activity
+public class GirlmenDownloadActivity extends Activity
 {
 	/** jsonファイルのURL. */
 	static final String DOWNLOAD_FILE_URL
-	= Constants.URL_DOKUJO;
+	= Constants.URL_GIRLMEN;
 	
-	static final String FILE_LOCAL_PATH = Constants.FILE_DOKUJO;
+	static final String FILE_LOCAL_PATH = Constants.FILE_GIRLMEN;
 	
 	/*-----------------------------------------------------------------------*/
 
@@ -58,11 +59,11 @@ public class DokujoDownloadActivity extends Activity
         super.onCreate (savedInstanceState);
         this.setContentView (R.layout.activity_main);
         
-        Log.d("KyouDebug", "DokujoDownloadActivity start!");
+        Log.d("KyouDebug", "GirlMenDownloadActivity start!");
         
         //TODO ディレクトリ作成
      // SD カード/パッケージ名 ディレクトリ生成  
-        File outDir = new File(Constants.DOKUJO_PATH);  
+        File outDir = new File(Constants.GIRLMEN_PATH);  
         // パッケージ名のディレクトリが SD カードになければ作成します。  
         if (outDir.exists() == false) {
             outDir.mkdirs();  
@@ -74,25 +75,25 @@ public class DokujoDownloadActivity extends Activity
             @Override
             public void onSuccess(String response) {
             	// レスポンスを保存
-            	FileUtil.writeFile(response.getBytes(), Constants.FILE_DOKUJO);
+            	FileUtil.writeFile(response.getBytes(), Constants.FILE_GIRLMEN);
 
-        		List<Dokujo> dokujoList = Dokujo.readDokujo(Constants.FILE_DOKUJO);	
+        		List<Girlmen> girlmenList = Girlmen.readGirlmen(Constants.FILE_GIRLMEN);	
 
                 MyAsyncHttpClient getter = new MyAsyncHttpClient();
 
-        		for(final Dokujo dokujo : dokujoList) {
+        		for(final Girlmen girlmen : girlmenList) {
 
-        			Log.d("KyouDebug", dokujo.getTitle());
+        			Log.d("KyouDebug", girlmen.getUrl());
         			
         			// 画像ファイルを取得して保存
-        			String[] parts = dokujo.getImage().split("/");
+        			String[] parts = girlmen.getImage().split("/");
         			final String fileName = parts[parts.length -1];
-        			getter.get(dokujo.getImage(), new BinaryHttpResponseHandler() {
+        			getter.get(girlmen.getImage(), new BinaryHttpResponseHandler() {
         				@Override
         	            public void onSuccess(byte[] image) {
-                			Log.d("KyouDebug", dokujo.getImage());
+                			Log.d("KyouDebug", girlmen.getImage());
                 			
-        					FileUtil.writeFile(image, Constants.DOKUJO_PATH + fileName);
+        					FileUtil.writeFile(image, Constants.GIRLMEN_PATH + fileName);
         				}
         			});
         		}

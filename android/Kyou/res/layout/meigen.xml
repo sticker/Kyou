@@ -13,8 +13,6 @@
     android:autoLink="web"
     android:padding="3dp"
     android:background="@drawable/border"
-    android:clickable="true" 
-    android:onClick="onClickDokujo"
 	>
 </TextView>
 

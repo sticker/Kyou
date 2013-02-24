@@ -12,31 +12,29 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-public class Dokujo {
+public class Girlmen {
 
 	private String url;
-	private String title;
 	private String image;
 	
-	public Dokujo(){
+	public Girlmen(){
 	}
 	
-	public Dokujo(String url, String title, String image){
+	public Girlmen(String url, String title, String image){
 		this.url = url;
-		this.title = title;
 		this.image = image;
 	}
 	
-	public static List<Dokujo> readDokujo(String file_name) {
+	public static List<Girlmen> readGirlmen(String file_name) {
 
-		List<Dokujo> list = null;
+		List<Girlmen> list = null;
 		InputStreamReader isr = null;
 
 		try {
 			isr = new InputStreamReader(new FileInputStream(file_name));
 			JsonReader jsr = new JsonReader(isr);
 			Gson mygson = new Gson();
-			Type collectionType = new TypeToken<Collection<Dokujo>>() {
+			Type collectionType = new TypeToken<Collection<Girlmen>>() {
 			}.getType();
 			list = mygson.fromJson(jsr, collectionType);
 
@@ -62,12 +60,6 @@ public class Dokujo {
 	}
 	public void setUrl(String url) {
 		this.url = url;
-	}
-	public String getTitle() {
-		return title;
-	}
-	public void setTitle(String title) {
-		this.title = title;
 	}
 	public String getImage() {
 		return image;

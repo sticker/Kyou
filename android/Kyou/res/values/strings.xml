@@ -4,8 +4,10 @@
     <string name="app_name">Kyou</string>
     <string name="menu_settings">Settings</string>
     <string name="btn_download">Download</string>
-    <string name="btn_draw">表示する</string>
+    <string name="btn_update">Update!</string>
     
-    <string name="txt_dokujo">sample</string>
+    <string name="meigen_title">ポジティブ名言</string>
+    <string name="girlmen_title">今日の注目ガール・おしゃれ男子</string>
+    <string name="dokujo_title">毒女ニュース</string>
 
 </resources>

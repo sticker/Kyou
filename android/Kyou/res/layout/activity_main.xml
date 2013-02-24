@@ -13,29 +13,99 @@
         android:text="@string/btn_download" />
 
     <Button
-        android:id="@+id/btn_draw"
+        android:id="@+id/btn_update"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/btn_download"
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/btn_download"
-        android:text="@string/btn_draw" />
+        android:text="@string/btn_update" />
 
-    <LinearLayout
-        android:id="@+id/Parent"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+    <ScrollView
+        android:id="@+id/all_scroll"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
-        android:layout_below="@+id/btn_download"
-        android:orientation="vertical" >
+        android:layout_below="@+id/btn_download" >
 
-        <!-- TextView
-            android:id="@+id/txt_dokujo"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/all_main"
+            android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="@string/txt_dokujo" />
-        -->
+            android:orientation="vertical" >
 
-    </LinearLayout>
+            <!-- ポジティブ名言 -->
+
+            <LinearLayout
+                android:id="@+id/meigen_main"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/meigen_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gradient"
+                    android:text="@string/meigen_title"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    android:id="@+id/meigen_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 今日の注目ガール・おしゃれ男子 -->
+
+            <LinearLayout
+                android:id="@+id/girlmen_main"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/girlmen_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gradient"
+                    android:text="@string/girlmen_title"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    android:id="@+id/girlmen_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal" >
+                </LinearLayout>
+            </LinearLayout>
+
+            <!-- 毒女ニュース -->
+
+            <LinearLayout
+                android:id="@+id/dokujo_main"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/dokujo_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gradient"
+                    android:text="@string/dokujo_title"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    android:id="@+id/dokujo_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
 
 </RelativeLayout>

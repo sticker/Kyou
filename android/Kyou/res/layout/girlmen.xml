@@ -14,7 +14,7 @@
     android:padding="3dp"
     android:background="@drawable/border"
     android:clickable="true" 
-    android:onClick="onClickDokujo"
+    android:onClick="onClickGirlmen"
 	>
 </TextView>
 

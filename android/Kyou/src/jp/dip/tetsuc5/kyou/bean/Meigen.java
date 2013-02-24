@@ -12,31 +12,46 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.google.gson.stream.JsonReader;
 
-public class Dokujo {
+public class Meigen {
 
-	private String url;
-	private String title;
-	private String image;
+	private String text;
+	private String auther;
 	
-	public Dokujo(){
+	public Meigen(){
 	}
 	
-	public Dokujo(String url, String title, String image){
-		this.url = url;
-		this.title = title;
-		this.image = image;
+	public Meigen(String text, String auther){
+		this.text = text;
+		this.auther = auther;
 	}
 	
-	public static List<Dokujo> readDokujo(String file_name) {
+	public static List<Meigen> readMeigen(String json) {
 
-		List<Dokujo> list = null;
+		List<Meigen> list = null;
+
+		try {
+			Gson mygson = new Gson();
+			Type collectionType = new TypeToken<Collection<Meigen>>() {
+			}.getType();
+			list = mygson.fromJson(json, collectionType);
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+
+		return list;
+	}
+	
+	public static List<Meigen> readMeigenFile(String file_name) {
+
+		List<Meigen> list = null;
 		InputStreamReader isr = null;
 
 		try {
 			isr = new InputStreamReader(new FileInputStream(file_name));
 			JsonReader jsr = new JsonReader(isr);
 			Gson mygson = new Gson();
-			Type collectionType = new TypeToken<Collection<Dokujo>>() {
+			Type collectionType = new TypeToken<Collection<Meigen>>() {
 			}.getType();
 			list = mygson.fromJson(jsr, collectionType);
 
@@ -56,25 +71,21 @@ public class Dokujo {
 
 		return list;
 	}
-	
-	public String getUrl() {
-		return url;
+
+	public String getText() {
+		return text;
 	}
-	public void setUrl(String url) {
-		this.url = url;
+
+	public void setText(String text) {
+		this.text = text;
 	}
-	public String getTitle() {
-		return title;
+
+	public String getAuther() {
+		return auther;
 	}
-	public void setTitle(String title) {
-		this.title = title;
+
+	public void setAuther(String auther) {
+		this.auther = auther;
 	}
-	public String getImage() {
-		return image;
-	}
-	public void setImage(String image) {
-		this.image = image;
-	}
-	
-	
+
 }
