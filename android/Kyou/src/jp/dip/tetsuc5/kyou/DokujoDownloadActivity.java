@@ -35,8 +35,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.util.Log;
+import android.view.Gravity;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /**
  * HTTPサーバからファイルをレジュームダウンロードするサンプル.
@@ -60,6 +62,7 @@ public class DokujoDownloadActivity extends Activity
         
         Log.d("KyouDebug", "DokujoDownloadActivity start!");
         
+        try {
         //TODO ディレクトリ作成
      // SD カード/パッケージ名 ディレクトリ生成  
         File outDir = new File(Constants.DOKUJO_PATH);  
@@ -96,9 +99,20 @@ public class DokujoDownloadActivity extends Activity
         				}
         			});
         		}
+        		Toast toast = Toast.makeText(
+            			getApplicationContext(), "Download成功！[Dokujo]", Toast.LENGTH_SHORT);
+            		toast.setGravity(Gravity.TOP | Gravity.RIGHT, 0, 0);
+            		toast.show();
             }
         });
         
         finish();
+    } catch(Exception e){
+    	e.printStackTrace();
+    	Toast toast = Toast.makeText(
+    			getApplicationContext(), "Download失敗！[Girlmen]", Toast.LENGTH_SHORT);
+    		toast.setGravity(Gravity.TOP | Gravity.RIGHT, 0, 0);
+    		toast.show();
+    		finish();
     }
-}
+}}

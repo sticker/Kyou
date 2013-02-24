@@ -96,6 +96,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 		if (v == btn_update) {
 			printMeigen();
+			printGirlmen();
 			printDokujo();
 		}
 	}
@@ -157,6 +158,13 @@ public class MainActivity extends Activity implements OnClickListener {
 		try {
 			List<Girlmen> girlmenList = Girlmen.readGirlmen(Constants.FILE_GIRLMEN);
 
+			if(girlmenList == null){
+				Intent i = new Intent(getApplicationContext(),
+						GirlmenDownloadActivity.class);
+				startActivity(i);
+				Thread.sleep(3000);
+			}
+			
 			LinearLayout layout;
 			layout = (LinearLayout) findViewById(R.id.girlmen_parent);
 			if (layout.getChildCount() > 0) {// 子Viewが存在する場合
@@ -166,12 +174,13 @@ public class MainActivity extends Activity implements OnClickListener {
 			for (Girlmen girlmen : girlmenList) {
 
 				Log.d("KyouDebug", girlmen.getUrl());
+				Log.d("KyouDebug", girlmen.getProfile());
 
 				// TextView追加
 				TextView tv = (TextView) getLayoutInflater().inflate(
 						R.layout.girlmen, null);
 //				tv.setText(girlmen.getTitle());
-				tv.setText("名前いれる");
+				tv.setText(girlmen.getProfile());
 
 				// 画像ファイル名取得
 				String[] parts = girlmen.getImage().split("/");
@@ -213,6 +222,13 @@ public class MainActivity extends Activity implements OnClickListener {
 		try {
 			List<Dokujo> dokujoList = Dokujo.readDokujo(Constants.FILE_DOKUJO);
 
+			if(dokujoList == null){
+				Intent i = new Intent(getApplicationContext(),
+						DokujoDownloadActivity.class);
+				startActivity(i);
+				Thread.sleep(3000);
+			}
+			
 			LinearLayout layout;
 			layout = (LinearLayout) findViewById(R.id.dokujo_parent);
 			if (layout.getChildCount() > 0) {// 子Viewが存在する場合

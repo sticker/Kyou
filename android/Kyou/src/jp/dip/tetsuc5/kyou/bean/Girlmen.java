@@ -16,13 +16,15 @@ public class Girlmen {
 
 	private String url;
 	private String image;
+	private String profile;
 	
 	public Girlmen(){
 	}
 	
-	public Girlmen(String url, String title, String image){
+	public Girlmen(String url, String title, String image, String profile){
 		this.url = url;
 		this.image = image;
+		this.profile = profile;
 	}
 	
 	public static List<Girlmen> readGirlmen(String file_name) {
@@ -66,6 +68,14 @@ public class Girlmen {
 	}
 	public void setImage(String image) {
 		this.image = image;
+	}
+
+	public String getProfile() {
+		return profile;
+	}
+
+	public void setProfile(String profile) {
+		this.profile = profile;
 	}
 	
 	
