@@ -30,14 +30,18 @@ use JSON;
 use Encode;
 
 my $url = 'http://www.oricon.co.jp/trend/';
+my $uri = new URI($url);
 
 #Scrape設定
 my $scraper = scraper {
     process 'div.mainPhoto>p>a', 'result[]' => scraper {
+        #process 'a', 'url' => [ '@href', sub { $_->scheme . "://" . $_->host } ];
+        #process 'a', 'url' => [ '@href', sub { $_->host } ];
         process 'a', 'url' => '@href';
         process 'a>img', 'image' => '@src';
     };
 };
+
 
 #UserAgentを変える
 use LWP::UserAgent;
@@ -62,6 +66,9 @@ my $res = $scraper->scrape( Encode::decode($encoding, $response->content));
 #print Dumper $res;
 #print "===============================\n\n";
 
+for(my $i=0; $i < scalar(@{%$res->{result}}); $i++){
+    $res->{result}[$i]{'url'} = $uri->scheme . "://" . $uri->host . $res->{result}[$i]{'url'};
+}
 
 #JSON形式で出力
 my $json = new JSON;
