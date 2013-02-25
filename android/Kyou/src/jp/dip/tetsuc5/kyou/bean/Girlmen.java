@@ -41,14 +41,14 @@ public class Girlmen {
 			list = mygson.fromJson(jsr, collectionType);
 
 		} catch (FileNotFoundException e) {
-			// System.out.println("ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB");
+			// System.out.println("ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚");
 			e.printStackTrace();
 		} finally {
 			if (isr != null) {
 				try {
 					isr.close();
 				} catch (IOException e) {
-					// System.out.println("“üo—ÍƒGƒ‰[‚Å‚·B");
+					// System.out.println("å…¥å‡ºåŠ›ã‚¨ãƒ©ãƒ¼ã§ã™ã€‚");
 					e.printStackTrace();
 				}
 			}
