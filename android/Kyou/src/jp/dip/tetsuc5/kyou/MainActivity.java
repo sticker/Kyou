@@ -87,9 +87,9 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-		
-		if(requestCode == Constants.REQ_CODE_GIRLMEN){
-			if(resultCode == Constants.OK){
+
+		if (requestCode == Constants.REQ_CODE_GIRLMEN) {
+			if (resultCode == Constants.OK) {
 				if (printGirlmen()) {
 					// 成功
 					Log.d("KyouDebug:", "printGirlmen success");
@@ -98,16 +98,16 @@ public class MainActivity extends Activity implements OnClickListener {
 					Log.d("KyouDebug:", "printGirlmen false");
 				}
 			} else {
-				//TODO 非表示にする等、表示の仕方を考える
-				Toast toast = Toast.makeText(
-            			getApplicationContext(), "Download失敗！[Girlmen]", Toast.LENGTH_SHORT);
-            		toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
-            		toast.show();
+				// TODO 非表示にする等、表示の仕方を考える
+				Toast toast = Toast.makeText(getApplicationContext(),
+						"Download失敗！[Girlmen]", Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+				toast.show();
 			}
 		}
-		
-		if(requestCode == Constants.REQ_CODE_DOKUJO){
-			if(resultCode == Constants.OK){
+
+		if (requestCode == Constants.REQ_CODE_DOKUJO) {
+			if (resultCode == Constants.OK) {
 				if (printDokujo()) {
 					// 成功
 					Log.d("KyouDebug:", "printDokujo success");
@@ -116,16 +116,16 @@ public class MainActivity extends Activity implements OnClickListener {
 					Log.d("KyouDebug:", "printDokujo false");
 				}
 			} else {
-				//TODO 非表示にする等、表示の仕方を考える
-				Toast toast = Toast.makeText(
-            			getApplicationContext(), "Download失敗！[Dokujo]", Toast.LENGTH_SHORT);
-            		toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
-            		toast.show();
+				// TODO 非表示にする等、表示の仕方を考える
+				Toast toast = Toast.makeText(getApplicationContext(),
+						"Download失敗！[Dokujo]", Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+				toast.show();
 			}
 		}
 
 	}
-	
+
 	@Override
 	public void onClick(View v) {
 		if (v == btn_download) {

@@ -16,15 +16,15 @@ public class Meigen {
 
 	private String text;
 	private String auther;
-	
-	public Meigen(){
+
+	public Meigen() {
 	}
-	
-	public Meigen(String text, String auther){
+
+	public Meigen(String text, String auther) {
 		this.text = text;
 		this.auther = auther;
 	}
-	
+
 	public static List<Meigen> readMeigen(String json) {
 
 		List<Meigen> list = null;
@@ -41,7 +41,7 @@ public class Meigen {
 
 		return list;
 	}
-	
+
 	public static List<Meigen> readMeigenFile(String file_name) {
 
 		List<Meigen> list = null;

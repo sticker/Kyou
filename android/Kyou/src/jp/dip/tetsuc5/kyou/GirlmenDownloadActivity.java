@@ -79,6 +79,7 @@ public class GirlmenDownloadActivity extends Activity {
 				}
 			});
 
+			setResult(Constants.OK);
 			finish();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -86,6 +87,8 @@ public class GirlmenDownloadActivity extends Activity {
 					"Download失敗！[Girlmen]", Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.TOP | Gravity.RIGHT, 0, 0);
 			toast.show();
+			
+			setResult(Constants.OK);
 			finish();
 		}
 	}
