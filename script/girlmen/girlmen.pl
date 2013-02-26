@@ -12,6 +12,7 @@
 #       {
 #           "url":"詳細URL",
 #           "image":"画像URL",
+#           "profile":"プロフィール[職業（年齢）]",
 #       },
 #       ・・・
 #    ]
@@ -31,6 +32,7 @@ use Encode;
 
 my $url = 'http://www.oricon.co.jp/trend/';
 my $uri = new URI($url);
+my $output = "/var/www/html/Kyou/girlmen.json";
 
 #Scrape設定
 my $scraper = scraper {
@@ -63,7 +65,6 @@ unless ($response->is_success) {
 my ($encoding) = $response->header('Content-Type') =~ /charset=([\w\-]+)/g;
 #外部サイトからの応答をScrape
 my $res = $scraper->scrape( Encode::decode($encoding, $response->content));
-
 #print Dumper $res;
 #print "===============================\n\n";
 
@@ -107,4 +108,8 @@ $json_text .= $json->encode($res->{result}).', ';
 $json_text =~ s/,.$//s; #最後のカンマを除去
 #$json_text .= ']';  #JSONハッシュ配列の閉じ
 
-print utf8::is_utf8($json_text) ? encode('utf-8', $json_text) : $json_text;
+#print utf8::is_utf8($json_text) ? encode('utf-8', $json_text) : $json_text;
+
+open(OUT, "> $output") || die "ERROR: $output $!\n";
+print OUT utf8::is_utf8($json_text) ? encode('utf-8', $json_text) : $json_text;
+

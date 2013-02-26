@@ -30,13 +30,12 @@ use URI;
 use JSON;
 use Encode;
 
-my $url = 'http://www.officiallyjd.com/';
+my $url = 'http://www.amazon.co.jp/%E3%81%8A%E8%B2%B7%E3%81%84%E5%BE%97%E6%83%85%E5%A0%B1/b/ref=amb_link_64854409_1?ie=UTF8&node=76366051';
 
 #Scrape設定
 my $scraper = scraper {
-    process 'div.description', 'result[]' => scraper {
-        process 'a', 'url' => '@href';
-        process 'a>img', 'image' => '@src', 'title' => '@title';
+    process 'div.imageContainer', 'result[]' => scraper {
+        process 'span.s9TitleText', 'txt' => 'TEXT';
     };
 };
 
