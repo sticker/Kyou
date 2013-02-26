@@ -47,7 +47,9 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/gradient"
+                    android:padding="3dp"
                     android:text="@string/meigen_title"
+                    android:textColor="#ffc"
                     android:textSize="24sp" />
 
                 <LinearLayout
@@ -71,7 +73,9 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/gradient"
+                    android:padding="3dp"
                     android:text="@string/girlmen_title"
+                    android:textColor="#ffc"
                     android:textSize="24sp" />
 
                 <LinearLayout
@@ -95,7 +99,9 @@
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/gradient"
+                    android:padding="3dp"
                     android:text="@string/dokujo_title"
+                    android:textColor="#ffc"
                     android:textSize="24sp" />
 
                 <LinearLayout

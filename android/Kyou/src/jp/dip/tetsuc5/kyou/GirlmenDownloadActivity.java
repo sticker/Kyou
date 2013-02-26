@@ -49,7 +49,7 @@ public class GirlmenDownloadActivity extends Activity {
 							Constants.FILE_GIRLMEN);
 
 					List<Girlmen> girlmenList = Girlmen
-							.readGirlmen(Constants.FILE_GIRLMEN);
+							.read(Constants.FILE_GIRLMEN);
 
 					MyAsyncHttpClient getter = new MyAsyncHttpClient();
 

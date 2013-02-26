@@ -50,7 +50,7 @@ public class DokujoDownloadActivity extends Activity {
 							Constants.FILE_DOKUJO);
 
 					List<Dokujo> dokujoList = Dokujo
-							.readDokujo(Constants.FILE_DOKUJO);
+							.read(Constants.FILE_DOKUJO);
 
 					MyAsyncHttpClient getter = new MyAsyncHttpClient();
 

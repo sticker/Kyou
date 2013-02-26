@@ -28,6 +28,7 @@
         </activity>
         <activity android:name=".DokujoDownloadActivity"></activity>
         <activity android:name=".GirlmenDownloadActivity"></activity>
+        <activity android:name=".MatomeDownloadActivity"></activity>
     </application>
 
 </manifest>

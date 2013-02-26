@@ -25,7 +25,7 @@ public class Meigen {
 		this.auther = auther;
 	}
 
-	public static List<Meigen> readMeigen(String json) {
+	public static List<Meigen> read(String json) {
 
 		List<Meigen> list = null;
 

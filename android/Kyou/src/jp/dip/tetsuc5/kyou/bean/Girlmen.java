@@ -27,7 +27,7 @@ public class Girlmen {
 		this.profile = profile;
 	}
 
-	public static List<Girlmen> readGirlmen(String file_name) {
+	public static List<Girlmen> read(String file_name) {
 
 		List<Girlmen> list = null;
 		InputStreamReader isr = null;

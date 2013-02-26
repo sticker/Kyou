@@ -27,7 +27,7 @@ public class Dokujo {
 		this.image = image;
 	}
 
-	public static List<Dokujo> readDokujo(String file_name) {
+	public static List<Dokujo> read(String file_name) {
 
 		List<Dokujo> list = null;
 		InputStreamReader isr = null;
