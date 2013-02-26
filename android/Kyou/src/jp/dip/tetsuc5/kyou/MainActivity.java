@@ -1,39 +1,23 @@
 package jp.dip.tetsuc5.kyou;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.URL;
-import java.util.Collection;
 import java.util.List;
 
 import jp.dip.tetsuc5.kyou.bean.Dokujo;
 import jp.dip.tetsuc5.kyou.bean.Girlmen;
 import jp.dip.tetsuc5.kyou.bean.Meigen;
 import jp.dip.tetsuc5.kyou.util.Constants;
+import jp.dip.tetsuc5.kyou.util.FileUtil;
 import jp.dip.tetsuc5.kyou.util.MyAsyncHttpClient;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
-import android.os.StrictMode;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.text.Html;
 import android.util.Log;
-import android.view.LayoutInflater;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -59,28 +43,87 @@ public class MainActivity extends Activity implements OnClickListener {
 		btn_download.setOnClickListener(this);
 		btn_update.setOnClickListener(this);
 
+		// åè¨€å–å¾—
 		if (printMeigen()) {
-			// ¬Œ÷
+			// æˆåŠŸ
 			Log.d("KyouDebug:", "printMeigen success");
 		} else {
-			// ¸”s
+			// å¤±æ•—
 			Log.d("KyouDebug:", "printMeigen false");
+		}
 
-		}
-		if (printGirlmen()) {
-			// ¬Œ÷
-			Log.d("KyouDebug:", "printGirlmen success");
+		// JSONãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãŸã‚‰æ³¨ç›®ã‚¬ãƒ¼ãƒ«ãƒ»ç”·å­å–å¾—
+		// å­˜åœ¨ã—ãªã‘ã‚Œã°ã¾ãšãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
+		if (!FileUtil.isExists(Constants.FILE_GIRLMEN)) {
+			Intent i = new Intent(getApplicationContext(),
+					GirlmenDownloadActivity.class);
+			startActivityForResult(i, Constants.REQ_CODE_GIRLMEN);
 		} else {
-			// ¸”s
-			Log.d("KyouDebug:", "printGirlmen false");
+
+			if (printGirlmen()) {
+				// æˆåŠŸ
+				Log.d("KyouDebug:", "printGirlmen success");
+			} else {
+				// å¤±æ•—
+				Log.d("KyouDebug:", "printGirlmen false");
+			}
 		}
-		if (printDokujo()) {
-			// ¬Œ÷
-			Log.d("KyouDebug:", "printDokujo success");
+
+		// JSONãƒ•ã‚¡ã‚¤ãƒ«ãŒå­˜åœ¨ã—ãŸã‚‰æ¯’å¥³ãƒ‹ãƒ¥ãƒ¼ã‚¹å–å¾—
+		// å­˜åœ¨ã—ãªã‘ã‚Œã°ã¾ãšãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰
+		if (!FileUtil.isExists(Constants.FILE_DOKUJO)) {
+			Intent i = new Intent(getApplicationContext(),
+					DokujoDownloadActivity.class);
+			startActivityForResult(i, Constants.REQ_CODE_DOKUJO);
 		} else {
-			// ¸”s
-			Log.d("KyouDebug:", "printDokujo false");
+			if (printDokujo()) {
+				// æˆåŠŸ
+				Log.d("KyouDebug:", "printDokujo success");
+			} else {
+				// å¤±æ•—
+				Log.d("KyouDebug:", "printDokujo false");
+			}
 		}
+	}
+
+	protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+		if (requestCode == Constants.REQ_CODE_GIRLMEN) {
+			if (resultCode == Constants.OK) {
+				if (printGirlmen()) {
+					// æˆåŠŸ
+					Log.d("KyouDebug:", "printGirlmen success");
+				} else {
+					// å¤±æ•—
+					Log.d("KyouDebug:", "printGirlmen false");
+				}
+			} else {
+				// TODO éè¡¨ç¤ºã«ã™ã‚‹ç­‰ã€è¡¨ç¤ºã®ä»•æ–¹ã‚’è€ƒãˆã‚‹
+				Toast toast = Toast.makeText(getApplicationContext(),
+						"Downloadå¤±æ•—ï¼[Girlmen]", Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+				toast.show();
+			}
+		}
+
+		if (requestCode == Constants.REQ_CODE_DOKUJO) {
+			if (resultCode == Constants.OK) {
+				if (printDokujo()) {
+					// æˆåŠŸ
+					Log.d("KyouDebug:", "printDokujo success");
+				} else {
+					// å¤±æ•—
+					Log.d("KyouDebug:", "printDokujo false");
+				}
+			} else {
+				// TODO éè¡¨ç¤ºã«ã™ã‚‹ç­‰ã€è¡¨ç¤ºã®ä»•æ–¹ã‚’è€ƒãˆã‚‹
+				Toast toast = Toast.makeText(getApplicationContext(),
+						"Downloadå¤±æ•—ï¼[Dokujo]", Toast.LENGTH_SHORT);
+				toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
+				toast.show();
+			}
+		}
+
 	}
 
 	@Override
@@ -89,13 +132,14 @@ public class MainActivity extends Activity implements OnClickListener {
 			Intent i = new Intent(getApplicationContext(),
 					DokujoDownloadActivity.class);
 			startActivity(i);
-			
+
 			i = new Intent(getApplicationContext(),
 					GirlmenDownloadActivity.class);
 			startActivity(i);
 		}
 		if (v == btn_update) {
 			printMeigen();
+			printGirlmen();
 			printDokujo();
 		}
 	}
@@ -108,7 +152,7 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	// /**********************************************************
-	// ƒ|ƒWƒeƒBƒu–¼Œ¾
+	// ãƒã‚¸ãƒ†ã‚£ãƒ–åè¨€
 	// /**********************************************************
 	public boolean printMeigen() {
 
@@ -123,15 +167,15 @@ public class MainActivity extends Activity implements OnClickListener {
 
 					LinearLayout layout;
 					layout = (LinearLayout) findViewById(R.id.meigen_parent);
-					if (layout.getChildCount() > 0) {// qView‚ª‘¶İ‚·‚éê‡
-						layout.removeAllViews();// “®“I‚Éíœ‚·‚éB
+					if (layout.getChildCount() > 0) {// å­ViewãŒå­˜åœ¨ã™ã‚‹å ´åˆ
+						layout.removeAllViews();// å‹•çš„ã«å‰Šé™¤ã™ã‚‹ã€‚
 					}
 
 					for (Meigen meigen : meigenList) {
 
 						Log.d("KyouDebug", meigen.getText());
 
-						// TextView’Ç‰Á
+						// TextViewè¿½åŠ 
 						TextView tv = (TextView) getLayoutInflater().inflate(
 								R.layout.meigen, null);
 						tv.setText(meigen.getText() + "|" + meigen.getAuther());
@@ -150,30 +194,39 @@ public class MainActivity extends Activity implements OnClickListener {
 	}
 
 	// /**********************************************************
-	// ¡“ú‚Ì’–ÚƒK[ƒ‹E‚¨‚µ‚á‚ê’jq
+	// ä»Šæ—¥ã®æ³¨ç›®ã‚¬ãƒ¼ãƒ«ãƒ»ãŠã—ã‚ƒã‚Œç”·å­
 	// /**********************************************************
 	public boolean printGirlmen() {
 
 		try {
-			List<Girlmen> girlmenList = Girlmen.readGirlmen(Constants.FILE_GIRLMEN);
+			List<Girlmen> girlmenList = Girlmen
+					.readGirlmen(Constants.FILE_GIRLMEN);
+
+			if (girlmenList == null) {
+				Intent i = new Intent(getApplicationContext(),
+						GirlmenDownloadActivity.class);
+				startActivity(i);
+				Thread.sleep(5000);
+			}
 
 			LinearLayout layout;
 			layout = (LinearLayout) findViewById(R.id.girlmen_parent);
-			if (layout.getChildCount() > 0) {// qView‚ª‘¶İ‚·‚éê‡
-				layout.removeAllViews();// “®“I‚Éíœ‚·‚éB
+			if (layout.getChildCount() > 0) {// å­ViewãŒå­˜åœ¨ã™ã‚‹å ´åˆ
+				layout.removeAllViews();// å‹•çš„ã«å‰Šé™¤ã™ã‚‹ã€‚
 			}
 
 			for (Girlmen girlmen : girlmenList) {
 
 				Log.d("KyouDebug", girlmen.getUrl());
+				Log.d("KyouDebug", girlmen.getProfile());
 
-				// TextView’Ç‰Á
+				// TextViewè¿½åŠ 
 				TextView tv = (TextView) getLayoutInflater().inflate(
 						R.layout.girlmen, null);
-//				tv.setText(girlmen.getTitle());
-				tv.setText("–¼‘O‚¢‚ê‚é");
+				// tv.setText(girlmen.getTitle());
+				tv.setText(girlmen.getProfile());
 
-				// ‰æ‘œƒtƒ@ƒCƒ‹–¼æ“¾
+				// ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«åå–å¾—
 				String[] parts = girlmen.getImage().split("/");
 				final String fileName = parts[parts.length - 1];
 
@@ -183,7 +236,7 @@ public class MainActivity extends Activity implements OnClickListener {
 						girlmen_img.getIntrinsicHeight());
 				tv.setCompoundDrawables(null, girlmen_img, null, null);
 
-				// Link‚Â‚¯‚é
+				// Linkã¤ã‘ã‚‹
 				tv.setContentDescription(girlmen.getUrl());
 				layout.addView(tv);
 			}
@@ -200,35 +253,42 @@ public class MainActivity extends Activity implements OnClickListener {
 		String url = view.getContentDescription().toString();
 		Log.d("KyouDebug:onClickGirlmen", url);
 
-		// Webƒuƒ‰ƒEƒU‚ÌŒÄ‚Ño‚µ
+		// Webãƒ–ãƒ©ã‚¦ã‚¶ã®å‘¼ã³å‡ºã—
 		Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(url));
 		startActivity(intent);
 	}
-	
+
 	// /**********************************************************
-	// “Å—ƒjƒ…[ƒX
+	// æ¯’å¥³ãƒ‹ãƒ¥ãƒ¼ã‚¹
 	// /**********************************************************
 	public boolean printDokujo() {
 
 		try {
 			List<Dokujo> dokujoList = Dokujo.readDokujo(Constants.FILE_DOKUJO);
 
+			if (dokujoList == null) {
+				Intent i = new Intent(getApplicationContext(),
+						DokujoDownloadActivity.class);
+				startActivity(i);
+				Thread.sleep(3000);
+			}
+
 			LinearLayout layout;
 			layout = (LinearLayout) findViewById(R.id.dokujo_parent);
-			if (layout.getChildCount() > 0) {// qView‚ª‘¶İ‚·‚éê‡
-				layout.removeAllViews();// “®“I‚Éíœ‚·‚éB
+			if (layout.getChildCount() > 0) {// å­ViewãŒå­˜åœ¨ã™ã‚‹å ´åˆ
+				layout.removeAllViews();// å‹•çš„ã«å‰Šé™¤ã™ã‚‹ã€‚
 			}
 
 			for (Dokujo dokujo : dokujoList) {
 
 				Log.d("KyouDebug", dokujo.getTitle());
 
-				// TextView’Ç‰Á
+				// TextViewè¿½åŠ 
 				TextView tv = (TextView) getLayoutInflater().inflate(
 						R.layout.dokujo, null);
 				tv.setText(dokujo.getTitle());
 
-				// ‰æ‘œƒtƒ@ƒCƒ‹–¼æ“¾
+				// ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«åå–å¾—
 				String[] parts = dokujo.getImage().split("/");
 				final String fileName = parts[parts.length - 1];
 
@@ -238,7 +298,7 @@ public class MainActivity extends Activity implements OnClickListener {
 						dokujo_img.getIntrinsicHeight());
 				tv.setCompoundDrawables(dokujo_img, null, null, null);
 
-				// Link‚Â‚¯‚é
+				// Linkã¤ã‘ã‚‹
 				tv.setContentDescription(dokujo.getUrl());
 				layout.addView(tv);
 			}
@@ -255,7 +315,7 @@ public class MainActivity extends Activity implements OnClickListener {
 		String url = view.getContentDescription().toString();
 		Log.d("KyouDebug:onClickDokujo", url);
 
-		// Webƒuƒ‰ƒEƒU‚ÌŒÄ‚Ño‚µ
+		// Webãƒ–ãƒ©ã‚¦ã‚¶ã®å‘¼ã³å‡ºã—
 		Intent intent = new Intent("android.intent.action.VIEW", Uri.parse(url));
 		startActivity(intent);
 	}

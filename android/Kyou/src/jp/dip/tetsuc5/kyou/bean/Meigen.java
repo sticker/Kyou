@@ -16,15 +16,15 @@ public class Meigen {
 
 	private String text;
 	private String auther;
-	
-	public Meigen(){
+
+	public Meigen() {
 	}
-	
-	public Meigen(String text, String auther){
+
+	public Meigen(String text, String auther) {
 		this.text = text;
 		this.auther = auther;
 	}
-	
+
 	public static List<Meigen> readMeigen(String json) {
 
 		List<Meigen> list = null;
@@ -41,7 +41,7 @@ public class Meigen {
 
 		return list;
 	}
-	
+
 	public static List<Meigen> readMeigenFile(String file_name) {
 
 		List<Meigen> list = null;
@@ -56,14 +56,14 @@ public class Meigen {
 			list = mygson.fromJson(jsr, collectionType);
 
 		} catch (FileNotFoundException e) {
-			// System.out.println("ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB");
+			// System.out.println("ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚");
 			e.printStackTrace();
 		} finally {
 			if (isr != null) {
 				try {
 					isr.close();
 				} catch (IOException e) {
-					// System.out.println("“üo—ÍƒGƒ‰[‚Å‚·B");
+					// System.out.println("å…¥å‡ºåŠ›ã‚¨ãƒ©ãƒ¼ã§ã™ã€‚");
 					e.printStackTrace();
 				}
 			}

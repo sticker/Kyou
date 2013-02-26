@@ -1,105 +1,95 @@
 package jp.dip.tetsuc5.kyou;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.ProtocolException;
-import java.net.URL;
-import java.util.Collection;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.google.gson.stream.JsonReader;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.BinaryHttpResponseHandler;
 
-import jp.dip.tetsuc5.kyou.bean.Dokujo;
 import jp.dip.tetsuc5.kyou.bean.Girlmen;
 import jp.dip.tetsuc5.kyou.util.Constants;
 import jp.dip.tetsuc5.kyou.util.FileUtil;
 import jp.dip.tetsuc5.kyou.util.MyAsyncHttpClient;
 
 import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.graphics.drawable.Drawable;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
-import android.widget.LinearLayout;
-import android.widget.TextView;
+import android.view.Gravity;
+import android.widget.Toast;
 
 /**
- * HTTPƒT[ƒo‚©‚çƒtƒ@ƒCƒ‹‚ğƒŒƒWƒ…[ƒ€ƒ_ƒEƒ“ƒ[ƒh‚·‚éƒTƒ“ƒvƒ‹.
+ * HTTPã‚µãƒ¼ãƒã‹ã‚‰ãƒ•ã‚¡ã‚¤ãƒ«ã‚’ãƒ¬ã‚¸ãƒ¥ãƒ¼ãƒ ãƒ€ã‚¦ãƒ³ãƒ­ãƒ¼ãƒ‰ã™ã‚‹ã‚µãƒ³ãƒ—ãƒ«.
  */
-public class GirlmenDownloadActivity extends Activity
-{
-	/** jsonƒtƒ@ƒCƒ‹‚ÌURL. */
-	static final String DOWNLOAD_FILE_URL
-	= Constants.URL_GIRLMEN;
-	
+public class GirlmenDownloadActivity extends Activity {
+	/** jsonãƒ•ã‚¡ã‚¤ãƒ«ã®URL. */
+	static final String DOWNLOAD_FILE_URL = Constants.URL_GIRLMEN;
+
 	static final String FILE_LOCAL_PATH = Constants.FILE_GIRLMEN;
-	
+
 	/*-----------------------------------------------------------------------*/
 
-    /** Called when the activity is first created. */
-    @Override
-    public void onCreate (Bundle savedInstanceState)
-    {
-        super.onCreate (savedInstanceState);
-        this.setContentView (R.layout.activity_main);
-        
-        Log.d("KyouDebug", "GirlMenDownloadActivity start!");
-        
-        //TODO ƒfƒBƒŒƒNƒgƒŠì¬
-     // SD ƒJ[ƒh/ƒpƒbƒP[ƒW–¼ ƒfƒBƒŒƒNƒgƒŠ¶¬  
-        File outDir = new File(Constants.GIRLMEN_PATH);  
-        // ƒpƒbƒP[ƒW–¼‚ÌƒfƒBƒŒƒNƒgƒŠ‚ª SD ƒJ[ƒh‚É‚È‚¯‚ê‚Îì¬‚µ‚Ü‚·B  
-        if (outDir.exists() == false) {
-            outDir.mkdirs();  
-        }  
-        
-        MyAsyncHttpClient client = new MyAsyncHttpClient();
-        
-        client.get(DOWNLOAD_FILE_URL, new AsyncHttpResponseHandler() {
-            @Override
-            public void onSuccess(String response) {
-            	// ƒŒƒXƒ|ƒ“ƒX‚ğ•Û‘¶
-            	FileUtil.writeFile(response.getBytes(), Constants.FILE_GIRLMEN);
+	/** Called when the activity is first created. */
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		this.setContentView(R.layout.activity_main);
 
-        		List<Girlmen> girlmenList = Girlmen.readGirlmen(Constants.FILE_GIRLMEN);	
+		Log.d("KyouDebug", "GirlMenDownloadActivity start!");
 
-                MyAsyncHttpClient getter = new MyAsyncHttpClient();
+		try {
+			// TODO ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªä½œæˆ
+			// SD ã‚«ãƒ¼ãƒ‰/ãƒ‘ãƒƒã‚±ãƒ¼ã‚¸å ãƒ‡ã‚£ãƒ¬ã‚¯ãƒˆãƒªç”Ÿæˆ
+			FileUtil.mkdir(Constants.GIRLMEN_PATH);
+			MyAsyncHttpClient client = new MyAsyncHttpClient();
 
-        		for(final Girlmen girlmen : girlmenList) {
+			client.get(DOWNLOAD_FILE_URL, new AsyncHttpResponseHandler() {
+				@Override
+				public void onSuccess(String response) {
+					// ãƒ¬ã‚¹ãƒãƒ³ã‚¹ã‚’ä¿å­˜
+					FileUtil.writeFile(response.getBytes(),
+							Constants.FILE_GIRLMEN);
 
-        			Log.d("KyouDebug", girlmen.getUrl());
-        			
-        			// ‰æ‘œƒtƒ@ƒCƒ‹‚ğæ“¾‚µ‚Ä•Û‘¶
-        			String[] parts = girlmen.getImage().split("/");
-        			final String fileName = parts[parts.length -1];
-        			getter.get(girlmen.getImage(), new BinaryHttpResponseHandler() {
-        				@Override
-        	            public void onSuccess(byte[] image) {
-                			Log.d("KyouDebug", girlmen.getImage());
-                			
-        					FileUtil.writeFile(image, Constants.GIRLMEN_PATH + fileName);
-        				}
-        			});
-        		}
-            }
-        });
-        
-        finish();
-    }
+					List<Girlmen> girlmenList = Girlmen
+							.readGirlmen(Constants.FILE_GIRLMEN);
+
+					MyAsyncHttpClient getter = new MyAsyncHttpClient();
+
+					for (final Girlmen girlmen : girlmenList) {
+
+						Log.d("KyouDebug", girlmen.getUrl());
+
+						// ç”»åƒãƒ•ã‚¡ã‚¤ãƒ«ã‚’å–å¾—ã—ã¦ä¿å­˜
+						String[] parts = girlmen.getImage().split("/");
+						final String fileName = parts[parts.length - 1];
+						getter.get(girlmen.getImage(),
+								new BinaryHttpResponseHandler() {
+									@Override
+									public void onSuccess(byte[] image) {
+										Log.d("KyouDebug", girlmen.getImage());
+
+										FileUtil.writeFile(image,
+												Constants.GIRLMEN_PATH
+														+ fileName);
+									}
+								});
+					}
+					Toast toast = Toast.makeText(getApplicationContext(),
+							"DownloadæˆåŠŸï¼[Girlmen]", Toast.LENGTH_SHORT);
+					toast.setGravity(Gravity.TOP | Gravity.RIGHT, 0, 0);
+					toast.show();
+				}
+			});
+
+			setResult(Constants.OK);
+			finish();
+		} catch (Exception e) {
+			e.printStackTrace();
+			Toast toast = Toast.makeText(getApplicationContext(),
+					"Downloadå¤±æ•—ï¼[Girlmen]", Toast.LENGTH_SHORT);
+			toast.setGravity(Gravity.TOP | Gravity.RIGHT, 0, 0);
+			toast.show();
+			
+			setResult(Constants.OK);
+			finish();
+		}
+	}
 }

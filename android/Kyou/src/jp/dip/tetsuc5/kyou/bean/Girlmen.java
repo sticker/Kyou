@@ -16,15 +16,17 @@ public class Girlmen {
 
 	private String url;
 	private String image;
-	
-	public Girlmen(){
+	private String profile;
+
+	public Girlmen() {
 	}
-	
-	public Girlmen(String url, String title, String image){
+
+	public Girlmen(String url, String title, String image, String profile) {
 		this.url = url;
 		this.image = image;
+		this.profile = profile;
 	}
-	
+
 	public static List<Girlmen> readGirlmen(String file_name) {
 
 		List<Girlmen> list = null;
@@ -39,14 +41,14 @@ public class Girlmen {
 			list = mygson.fromJson(jsr, collectionType);
 
 		} catch (FileNotFoundException e) {
-			// System.out.println("ƒtƒ@ƒCƒ‹‚ªŒ©‚Â‚©‚è‚Ü‚¹‚ñB");
+			// System.out.println("ãƒ•ã‚¡ã‚¤ãƒ«ãŒè¦‹ã¤ã‹ã‚Šã¾ã›ã‚“ã€‚");
 			e.printStackTrace();
 		} finally {
 			if (isr != null) {
 				try {
 					isr.close();
 				} catch (IOException e) {
-					// System.out.println("“üo—ÍƒGƒ‰[‚Å‚·B");
+					// System.out.println("å…¥å‡ºåŠ›ã‚¨ãƒ©ãƒ¼ã§ã™ã€‚");
 					e.printStackTrace();
 				}
 			}
@@ -54,19 +56,29 @@ public class Girlmen {
 
 		return list;
 	}
-	
+
 	public String getUrl() {
 		return url;
 	}
+
 	public void setUrl(String url) {
 		this.url = url;
 	}
+
 	public String getImage() {
 		return image;
 	}
+
 	public void setImage(String image) {
 		this.image = image;
 	}
-	
-	
+
+	public String getProfile() {
+		return profile;
+	}
+
+	public void setProfile(String profile) {
+		this.profile = profile;
+	}
+
 }
