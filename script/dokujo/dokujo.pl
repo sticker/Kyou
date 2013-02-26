@@ -30,12 +30,14 @@ use URI;
 use JSON;
 use Encode;
 
-my $url = 'http://www.amazon.co.jp/%E3%81%8A%E8%B2%B7%E3%81%84%E5%BE%97%E6%83%85%E5%A0%B1/b/ref=amb_link_64854409_1?ie=UTF8&node=76366051';
+my $url = 'http://www.officiallyjd.com/';
+my $output = "/var/www/html/Kyou/dokujo.json";
 
 #Scrape設定
 my $scraper = scraper {
-    process 'div.imageContainer', 'result[]' => scraper {
-        process 'span.s9TitleText', 'txt' => 'TEXT';
+    process 'div.description', 'result[]' => scraper {
+        process 'a', 'url' => '@href';
+        process 'a>img', 'image' => '@src', 'title' => '@title';
     };
 };
 
@@ -46,9 +48,9 @@ $scraper->user_agent($ua);
 
 #外部サイトへリクエスト
 my $response = $scraper->user_agent->get($url);
-print Dumper $response;
+#print Dumper $response;
 
-#外部サイトからエラー応答が返ってきたらERROR返却して終了
+#外部サイトからエラー応答が返ってきたらファイル出力せず終了
 unless ($response->is_success) {
     print "ERROR:remote site is down.";
     exit 1;
@@ -71,4 +73,7 @@ $json_text .= $json->encode($res->{result}).', ';
 $json_text =~ s/,.$//s; #最後のカンマを除去
 #$json_text .= ']';  #JSONハッシュ配列の閉じ
 
-print utf8::is_utf8($json_text) ? encode('utf-8', $json_text) : $json_text;
+#print utf8::is_utf8($json_text) ? encode('utf-8', $json_text) : $json_text;
+
+open(OUT, "> $output") || die "ERROR: $output $!\n";
+print OUT utf8::is_utf8($json_text) ? encode('utf-8', $json_text) : $json_text;
