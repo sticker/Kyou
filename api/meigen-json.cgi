@@ -17,7 +17,8 @@ my $auth        = 'kyou00';
 my $dbh = DBI->connect($data_source, $username, $auth);
 $dbh->do("SET NAMES utf8");
 
-my $sql = "SELECT text, auther FROM meigen ORDER BY RAND() limit 0, 3;";
+#my $sql = "SELECT text, auther FROM meigen ORDER BY RAND() limit 0, 3;";
+my $sql = "SELECT text, auther FROM meigen ORDER BY RAND() limit 0, 1;";
 my $sth = $dbh->prepare($sql);
 $sth->execute();
 
