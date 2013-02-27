@@ -33,13 +33,17 @@ public final class R {
         public static final int meigen_main=0x7f070004;
         public static final int meigen_parent=0x7f070006;
         public static final int meigen_title=0x7f070005;
-        public static final int menu_settings=0x7f07000d;
+        public static final int menu_settings=0x7f070010;
+        public static final int recipe_main=0x7f07000d;
+        public static final int recipe_parent=0x7f07000f;
+        public static final int recipe_title=0x7f07000e;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int dokujo=0x7f030001;
         public static final int girlmen=0x7f030002;
         public static final int meigen=0x7f030003;
+        public static final int recipe=0x7f030004;
     }
     public static final class menu {
         public static final int activity_main=0x7f060000;
@@ -52,6 +56,7 @@ public final class R {
         public static final int girlmen_title=0x7f040005;
         public static final int meigen_title=0x7f040004;
         public static final int menu_settings=0x7f040001;
+        public static final int recipe_title=0x7f040007;
     }
     public static final class style {
         /** 

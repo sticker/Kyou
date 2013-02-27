@@ -80,7 +80,7 @@ public class MatomeDownloadActivity extends Activity {
 								});
 					}
 					Toast toast = Toast.makeText(getApplicationContext(),
-							"Download成功！[MATOME]", Toast.LENGTH_SHORT);
+							"Download成功！[Matome]", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.TOP | Gravity.RIGHT, 0, 0);
 					toast.show();
 				}
@@ -90,7 +90,7 @@ public class MatomeDownloadActivity extends Activity {
 		} catch (Exception e) {
 			e.printStackTrace();
 			Toast toast = Toast.makeText(getApplicationContext(),
-					"Download失敗！[Girlmen]", Toast.LENGTH_SHORT);
+					"Download失敗！[Matome]", Toast.LENGTH_SHORT);
 			toast.setGravity(Gravity.TOP | Gravity.RIGHT, 0, 0);
 			toast.show();
 

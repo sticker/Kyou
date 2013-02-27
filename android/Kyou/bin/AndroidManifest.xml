@@ -29,6 +29,7 @@
         <activity android:name=".DokujoDownloadActivity"></activity>
         <activity android:name=".GirlmenDownloadActivity"></activity>
         <activity android:name=".MatomeDownloadActivity"></activity>
+        <activity android:name=".RecipeDownloadActivity"></activity>
     </application>
 
 </manifest>

@@ -88,7 +88,7 @@ public class GirlmenDownloadActivity extends Activity {
 			toast.setGravity(Gravity.TOP | Gravity.RIGHT, 0, 0);
 			toast.show();
 			
-			setResult(Constants.OK);
+			setResult(Constants.NG);
 			finish();
 		}
 	}

@@ -9,6 +9,7 @@ public class Constants {
 	public static int REQ_CODE_GIRLMEN = 1;
 	public static int REQ_CODE_DOKUJO = 2;
 	public static int REQ_CODE_MATOME = 3;
+	public static int REQ_CODE_RECIPE = 3;
 
 	public static int OK = 0;
 	public static int NG = 1;
@@ -26,6 +27,7 @@ public class Constants {
 	public static String GIRLMEN_PATH = SD_FILE_PATH + "girlmen"
 			+ File.separator;
 	public static String MATOME_PATH = SD_FILE_PATH + "matome" + File.separator;
+	public static String RECIPE_PATH = SD_FILE_PATH + "recipe" + File.separator;
 
 	public static String FILE_NAME_MEIGEN = "meigen.json";
 	public static String FILE_MEIGEN = MEIGEN_PATH + FILE_NAME_MEIGEN;
@@ -35,11 +37,14 @@ public class Constants {
 	public static String FILE_GIRLMEN = GIRLMEN_PATH + FILE_NAME_GIRLMEN;
 	public static String FILE_NAME_MATOME = "matome.json";
 	public static String FILE_MATOME = MATOME_PATH + FILE_NAME_MATOME;
+	public static String FILE_NAME_RECIPE = "recipe.json";
+	public static String FILE_RECIPE = RECIPE_PATH + FILE_NAME_RECIPE;
 
 	public static String URL_MEIGEN = "http://tetsuc5.dip.jp/cgi-bin/Kyou/meigen-json.cgi";
 	public static String URL_GIRLMEN = "http://tetsuc5.dip.jp/Kyou/girlmen.json";
 	public static String URL_DOKUJO = "http://tetsuc5.dip.jp/Kyou/dokujo.json";
 	public static String URL_MATOME = "http://tetsuc5.dip.jp/Kyou/matome.json";
+	public static String URL_RECIPE = "http://tetsuc5.dip.jp/Kyou/recipe.json";
 	
 	
 	
