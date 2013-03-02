@@ -6,6 +6,8 @@ import android.os.Environment;
 
 public class Constants {
 
+	public static String ID_ADMOB = "a15131d33ae8203";
+	
 	public static int REQ_CODE_GIRLMEN = 1;
 	public static int REQ_CODE_DOKUJO = 2;
 	public static int REQ_CODE_MATOME = 3;

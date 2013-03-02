@@ -15,6 +15,9 @@ import jp.dip.tetsuc5.kyou.util.Constants;
 import jp.dip.tetsuc5.kyou.util.FileUtil;
 import jp.dip.tetsuc5.kyou.util.MyAsyncHttpClient;
 
+import com.google.ads.AdRequest;
+import com.google.ads.AdSize;
+import com.google.ads.AdView;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 import com.loopj.android.http.BinaryHttpResponseHandler;
 
@@ -51,6 +54,7 @@ public class MainActivity extends BaseActivity {
 	MatomeDownload matomeDownload = new MatomeDownload();
 	RecipeDownload recipeDownload = new RecipeDownload();
 
+	private AdView adView;
 //	private Button btn_download;
 //	private Button btn_update;
 	private float _rate;
@@ -59,7 +63,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-
+		
 		setContentView(R.layout.activity_main);
 
 		registerDownloadBroadcastReceiver();
@@ -228,6 +232,7 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onDestroy() {
 		unregisterReceiver(progressReceiver);
+		adView.destroy();
 		super.onDestroy();
 	}
 
@@ -488,6 +493,12 @@ public class MainActivity extends BaseActivity {
 				tv.setContentDescription(matome.getUrl());
 				layout.addView(tv);
 			}
+			
+			adView = new AdView(this, AdSize.BANNER, Constants.ID_ADMOB);
+			layout.addView(adView);
+			AdRequest adRequest = new AdRequest();
+			adRequest.addTestDevice("CB511WWX9M");                      // Android 端末をテスト
+			adView.loadAd(adRequest);
 
 			return true;
 		} catch (Exception e) {
