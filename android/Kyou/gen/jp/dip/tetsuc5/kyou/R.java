@@ -20,23 +20,23 @@ public final class R {
         public static final int stone=0x7f020006;
     }
     public static final class id {
-        public static final int all_main=0x7f070003;
-        public static final int all_scroll=0x7f070002;
-        public static final int btn_download=0x7f070000;
-        public static final int btn_update=0x7f070001;
-        public static final int dokujo_main=0x7f07000d;
-        public static final int dokujo_parent=0x7f07000f;
-        public static final int dokujo_title=0x7f07000e;
-        public static final int girlmen_main=0x7f070007;
-        public static final int girlmen_parent=0x7f070009;
-        public static final int girlmen_title=0x7f070008;
-        public static final int meigen_main=0x7f070004;
-        public static final int meigen_parent=0x7f070006;
-        public static final int meigen_title=0x7f070005;
-        public static final int menu_settings=0x7f070010;
-        public static final int recipe_main=0x7f07000a;
-        public static final int recipe_parent=0x7f07000c;
-        public static final int recipe_title=0x7f07000b;
+        public static final int all_main=0x7f070001;
+        public static final int all_scroll=0x7f070000;
+        public static final int dokujo_main=0x7f07000b;
+        public static final int dokujo_parent=0x7f07000d;
+        public static final int dokujo_title=0x7f07000c;
+        public static final int girlmen_main=0x7f070005;
+        public static final int girlmen_parent=0x7f070007;
+        public static final int girlmen_title=0x7f070006;
+        public static final int meigen_main=0x7f070002;
+        public static final int meigen_parent=0x7f070004;
+        public static final int meigen_title=0x7f070003;
+        public static final int menu_autooff=0x7f070010;
+        public static final int menu_autoon=0x7f07000f;
+        public static final int menu_refresh=0x7f07000e;
+        public static final int recipe_main=0x7f070008;
+        public static final int recipe_parent=0x7f07000a;
+        public static final int recipe_title=0x7f070009;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -51,13 +51,15 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f040000;
-        public static final int btn_download=0x7f040002;
-        public static final int btn_update=0x7f040003;
-        public static final int dokujo_title=0x7f040006;
-        public static final int girlmen_title=0x7f040005;
-        public static final int meigen_title=0x7f040004;
-        public static final int menu_settings=0x7f040001;
-        public static final int recipe_title=0x7f040007;
+        public static final int btn_download=0x7f040004;
+        public static final int btn_update=0x7f040005;
+        public static final int dokujo_title=0x7f040008;
+        public static final int girlmen_title=0x7f040007;
+        public static final int meigen_title=0x7f040006;
+        public static final int menu_autooff=0x7f040003;
+        public static final int menu_autoon=0x7f040002;
+        public static final int menu_refresh=0x7f040001;
+        public static final int recipe_title=0x7f040009;
     }
     public static final class style {
         /** 

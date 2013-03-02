@@ -5,6 +5,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.app.Activity;
 import android.content.Context;
@@ -63,6 +64,45 @@ public class FileUtil extends Activity {
 			return false;
 		}
 
+	}
+
+	public static ArrayList<String> searchFiles(String dir_path, String expr,
+			boolean search_subdir) {
+		final File dir = new File(dir_path);
+
+		ArrayList<String> find_files = new ArrayList<String>();
+		final File[] files = dir.listFiles();
+		if (null != files) {
+			for (int i = 0; i < files.length; ++i) {
+				if (!files[i].isFile()) {
+					if (search_subdir) {
+						ArrayList<String> sub_files = searchFiles(
+								files[i].getPath(), expr, search_subdir);
+						find_files.addAll(sub_files);
+					}
+					continue;
+				}
+
+				final String filename = files[i].getName();
+				if ((null == expr) || filename.matches(expr)) {
+					// find_files.add(dir.getPath() + filename);
+					find_files.add(filename);
+				}
+			}
+		}
+		return find_files;
+	}
+
+	public static boolean rmFile(String filePath) {
+		try {
+			File file = new File(filePath);
+			file.delete();
+			return true;
+		} catch (Exception e) {
+			// TODO 自動生成された catch ブロック
+			e.printStackTrace();
+			return false;
+		}
 	}
 
 	// ボツ
