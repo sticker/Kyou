@@ -16,11 +16,15 @@ import jp.dip.tetsuc5.kyou.util.FileUtil;
 import jp.dip.tetsuc5.kyou.util.MyAsyncHttpClient;
 
 import com.loopj.android.http.AsyncHttpResponseHandler;
+import com.loopj.android.http.BinaryHttpResponseHandler;
 
 import android.net.Uri;
 import android.os.Bundle;
 import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Typeface;
@@ -36,7 +40,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-public class MainActivity extends Activity implements OnClickListener {
+public class MainActivity extends BaseActivity implements OnClickListener {
+
+	DownloadProgressBroadcastReceiver progressReceiver;
+	IntentFilter intentFilter;
 
 	private Button btn_download;
 	private Button btn_update;
@@ -48,6 +55,8 @@ public class MainActivity extends Activity implements OnClickListener {
 		super.onCreate(savedInstanceState);
 
 		setContentView(R.layout.activity_main);
+
+		registerDownloadBroadcastReceiver();
 
 		// サイズ調整（480px横幅を想定）
 		Bitmap _bm = BitmapFactory.decodeResource(getResources(),
@@ -79,9 +88,14 @@ public class MainActivity extends Activity implements OnClickListener {
 		// JSONファイルが存在したら注目ガール・男子取得
 		// 存在しなければまずダウンロード
 		if (!FileUtil.isExists(Constants.FILE_GIRLMEN)) {
-			Intent i = new Intent(getApplicationContext(),
-					GirlmenDownloadActivity.class);
-			startActivityForResult(i, Constants.REQ_CODE_GIRLMEN);
+			
+			GirlmenDownload girlmenDownload = new GirlmenDownload();
+			if(girlmenDownload.execute()){
+				Intent intent = new Intent(this, DownloadChecker.class);
+			    intent.putExtra("target", Constants.REQ_CODE_GIRLMEN);
+			    startService(intent);
+			}
+
 		} else {
 
 			if (printGirlmen()) {
@@ -96,13 +110,25 @@ public class MainActivity extends Activity implements OnClickListener {
 		// JSONファイルが存在したら毒女ニュース取得
 		// 存在しなければまずダウンロード
 		if (!FileUtil.isExists(Constants.FILE_DOKUJO)) {
-			Intent i = new Intent(getApplicationContext(),
-					DokujoDownloadActivity.class);
-			startActivityForResult(i, Constants.REQ_CODE_DOKUJO);
+			
+			DokujoDownload dokujoDownload = new DokujoDownload();
+			if(dokujoDownload.execute()){
+				MatomeDownload matomeDownload = new MatomeDownload();
+				if(matomeDownload.execute()){
+				Intent intent = new Intent(this, DownloadChecker.class);
+			    intent.putExtra("target", Constants.REQ_CODE_DOKUJO);
+			    startService(intent);
+				}
+			}
+
 		} else if (!FileUtil.isExists(Constants.FILE_MATOME)) {
-			Intent i = new Intent(getApplicationContext(),
-					MatomeDownloadActivity.class);
-			startActivityForResult(i, Constants.REQ_CODE_MATOME);
+			
+			MatomeDownload matomeDownload = new MatomeDownload();
+			if(matomeDownload.execute()){
+				Intent intent = new Intent(this, DownloadChecker.class);
+			    intent.putExtra("target", Constants.REQ_CODE_DOKUJO);
+			    startService(intent);
+				}
 		} else {
 			if (printDokujo()) {
 				// 成功
@@ -116,9 +142,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		// JSONファイルが存在したらつぶやきレシピ取得
 		// 存在しなければまずダウンロード
 		if (!FileUtil.isExists(Constants.FILE_RECIPE)) {
-			Intent i = new Intent(getApplicationContext(),
-					RecipeDownloadActivity.class);
-			startActivityForResult(i, Constants.REQ_CODE_RECIPE);
+			RecipeDownload recipeDownload = new RecipeDownload();
+			if(recipeDownload.execute()){
+				Intent intent = new Intent(getBaseContext(), DownloadChecker.class);
+			    intent.putExtra("target", Constants.REQ_CODE_RECIPE);
+			    startService(intent);
+			}
 		} else {
 
 			if (printRecipe()) {
@@ -140,84 +169,21 @@ public class MainActivity extends Activity implements OnClickListener {
 		}
 	}
 
-	protected void onActivityResult(int requestCode, int resultCode,
-			Intent intent) {
-		super.onActivityResult(requestCode, resultCode, intent);
-
-		if (requestCode == Constants.REQ_CODE_GIRLMEN) {
-			if (resultCode == Constants.OK) {
-				if (printGirlmen()) {
-					// 成功
-					Log.d("KyouDebug:", "printGirlmen success");
-				} else {
-					// 失敗
-					Log.d("KyouDebug:", "printGirlmen false");
-				}
-			} else {
-				// TODO 非表示にする等、表示の仕方を考える
-				Toast toast = Toast.makeText(getApplicationContext(),
-						"Download失敗！[Girlmen]", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
-				toast.show();
-			}
-		}
-
-		if (requestCode == Constants.REQ_CODE_DOKUJO
-				|| requestCode == Constants.REQ_CODE_MATOME) {
-			if (resultCode == Constants.OK) {
-				if (printDokujo()) {
-					// 成功
-					Log.d("KyouDebug:", "printDokujo success");
-				} else {
-					// 失敗
-					Log.d("KyouDebug:", "printDokujo false");
-				}
-			} else {
-				// TODO 非表示にする等、表示の仕方を考える
-				Toast toast = Toast.makeText(getApplicationContext(),
-						"Download失敗！[Dokujo]", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
-				toast.show();
-			}
-		}
-
-		if (requestCode == Constants.REQ_CODE_RECIPE) {
-			if (resultCode == Constants.OK) {
-				if (printRecipe()) {
-					// 成功
-					Log.d("KyouDebug:", "printRecipe success");
-				} else {
-					// 失敗
-					Log.d("KyouDebug:", "printRecipe false");
-				}
-			} else {
-				// TODO 非表示にする等、表示の仕方を考える
-				Toast toast = Toast.makeText(getApplicationContext(),
-						"Download失敗！[Recipe]", Toast.LENGTH_SHORT);
-				toast.setGravity(Gravity.BOTTOM | Gravity.CENTER, 0, 0);
-				toast.show();
-			}
-		}
-	}
-
 	@Override
 	public void onClick(View v) {
 		if (v == btn_download) {
-			Intent i = new Intent(getApplicationContext(),
-					DokujoDownloadActivity.class);
-			startActivity(i);
-
-			i = new Intent(getApplicationContext(),
-					GirlmenDownloadActivity.class);
-			startActivity(i);
-
-			i = new Intent(getApplicationContext(),
-					MatomeDownloadActivity.class);
-			startActivity(i);
-
-			i = new Intent(getApplicationContext(),
-					RecipeDownloadActivity.class);
-			startActivity(i);
+			DokujoDownload dokujoDownload = new DokujoDownload();
+			dokujoDownload.execute();
+			
+			GirlmenDownload girlmenDownload = new GirlmenDownload();
+			girlmenDownload.execute();
+			
+			MatomeDownload matomeDownload = new MatomeDownload();
+			matomeDownload.execute();
+			
+			RecipeDownload recipeDownload = new RecipeDownload();
+			recipeDownload.execute();
+			
 		}
 		if (v == btn_update) {
 			printGirlmen();
@@ -232,6 +198,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		// Inflate the menu; this adds items to the action bar if it is present.
 		getMenuInflater().inflate(R.menu.activity_main, menu);
 		return true;
+	}
+	
+	@Override
+	public void onDestroy(){
+		unregisterReceiver(progressReceiver);
+		super.onDestroy();
 	}
 
 	// /**********************************************************
@@ -303,11 +275,12 @@ public class MainActivity extends Activity implements OnClickListener {
 		try {
 			List<Girlmen> girlmenList = Girlmen.read(Constants.FILE_GIRLMEN);
 
-			if (girlmenList == null) {
-				Intent i = new Intent(getApplicationContext(),
-						GirlmenDownloadActivity.class);
-				startActivity(i);
-			}
+			// if (girlmenList == null) {
+			// Intent i = new Intent(getApplicationContext(),
+			// GirlmenDownloadActivity.class);
+			// startActivity(i);
+			//
+			// }
 
 			LinearLayout layout;
 			layout = (LinearLayout) findViewById(R.id.girlmen_parent);
@@ -367,16 +340,16 @@ public class MainActivity extends Activity implements OnClickListener {
 			List<Dokujo> dokujoList = Dokujo.read(Constants.FILE_DOKUJO);
 			List<Matome> matomeList = Matome.read(Constants.FILE_MATOME);
 
-			if (dokujoList == null) {
-				Intent i = new Intent(getApplicationContext(),
-						DokujoDownloadActivity.class);
-				startActivity(i);
-			}
-			if (matomeList == null) {
-				Intent i = new Intent(getApplicationContext(),
-						MatomeDownloadActivity.class);
-				startActivity(i);
-			}
+			// if (dokujoList == null) {
+			// Intent i = new Intent(getApplicationContext(),
+			// DokujoDownloadActivity.class);
+			// startActivity(i);
+			// }
+			// if (matomeList == null) {
+			// Intent i = new Intent(getApplicationContext(),
+			// MatomeDownloadActivity.class);
+			// startActivity(i);
+			// }
 
 			LinearLayout layout;
 			layout = (LinearLayout) findViewById(R.id.dokujo_parent);
@@ -479,11 +452,11 @@ public class MainActivity extends Activity implements OnClickListener {
 		try {
 			List<Recipe> recipeList = Recipe.read(Constants.FILE_RECIPE);
 
-			if (recipeList == null) {
-				Intent i = new Intent(getApplicationContext(),
-						RecipeDownloadActivity.class);
-				startActivity(i);
-			}
+			// if (recipeList == null) {
+			// Intent i = new Intent(getApplicationContext(),
+			// RecipeDownloadActivity.class);
+			// startActivity(i);
+			// }
 
 			LinearLayout layout;
 			layout = (LinearLayout) findViewById(R.id.recipe_parent);
@@ -511,6 +484,33 @@ public class MainActivity extends Activity implements OnClickListener {
 		} catch (Exception e) {
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	protected void registerDownloadBroadcastReceiver() {
+		progressReceiver = new DownloadProgressBroadcastReceiver();
+		intentFilter = new IntentFilter();
+		intentFilter.addAction("DOWNLOAD_PROGRESS_ACTION");
+		registerReceiver(progressReceiver, intentFilter);
+	}
+
+	public class DownloadProgressBroadcastReceiver extends BroadcastReceiver {
+
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			// Show Progress
+			Bundle bundle = intent.getExtras();
+			int target_result = bundle.getInt("target_result");
+			if (target_result == Constants.REQ_CODE_GIRLMEN) {
+				printGirlmen();
+			}
+			if (target_result == Constants.REQ_CODE_DOKUJO) {
+				printDokujo();
+			}
+			if (target_result == Constants.REQ_CODE_RECIPE) {
+				printRecipe();
+			}
+
 		}
 	}
 }

@@ -52,11 +52,11 @@ public class RecipeDownloadActivity extends Activity {
 							"Download成功！[Recipe]", Toast.LENGTH_SHORT);
 					toast.setGravity(Gravity.TOP | Gravity.RIGHT, 0, 0);
 					toast.show();
+					setResult(Constants.OK);
+					finish();
 				}
 			});
 
-			setResult(Constants.OK);
-			finish();
 		} catch (Exception e) {
 			e.printStackTrace();
 			Toast toast = Toast.makeText(getApplicationContext(),

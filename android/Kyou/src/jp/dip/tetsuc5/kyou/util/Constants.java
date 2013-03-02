@@ -9,7 +9,7 @@ public class Constants {
 	public static int REQ_CODE_GIRLMEN = 1;
 	public static int REQ_CODE_DOKUJO = 2;
 	public static int REQ_CODE_MATOME = 3;
-	public static int REQ_CODE_RECIPE = 3;
+	public static int REQ_CODE_RECIPE = 4;
 
 	public static int OK = 0;
 	public static int NG = 1;
