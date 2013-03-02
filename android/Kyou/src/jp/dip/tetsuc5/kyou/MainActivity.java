@@ -113,6 +113,23 @@ public class MainActivity extends Activity implements OnClickListener {
 			}
 		}
 
+		// JSONファイルが存在したらつぶやきレシピ取得
+		// 存在しなければまずダウンロード
+		if (!FileUtil.isExists(Constants.FILE_RECIPE)) {
+			Intent i = new Intent(getApplicationContext(),
+					RecipeDownloadActivity.class);
+			startActivityForResult(i, Constants.REQ_CODE_RECIPE);
+		} else {
+
+			if (printRecipe()) {
+				// 成功
+				Log.d("KyouDebug:", "printRecipe success");
+			} else {
+				// 失敗
+				Log.d("KyouDebug:", "printRecipe false");
+			}
+		}
+
 		// 名言取得
 		if (printMeigen()) {
 			// 成功

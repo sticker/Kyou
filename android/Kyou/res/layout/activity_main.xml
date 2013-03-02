@@ -86,6 +86,32 @@
                 </LinearLayout>
             </LinearLayout>
 
+            <!-- つぶやきレシピ -->
+
+            <LinearLayout
+                android:id="@+id/recipe_main"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <TextView
+                    android:id="@+id/recipe_title"
+                    android:layout_width="fill_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/gradient"
+                    android:padding="3dp"
+                    android:text="@string/recipe_title"
+                    android:textColor="#ffc"
+                    android:textSize="24sp" />
+
+                <LinearLayout
+                    android:id="@+id/recipe_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+                </LinearLayout>
+            </LinearLayout>
+
             <!-- 毒女ニュース -->
 
             <LinearLayout
@@ -111,34 +137,6 @@
                     android:orientation="vertical" >
                 </LinearLayout>
             </LinearLayout>
-            
-                        <!-- つぶやきレシピ -->
-
-            <LinearLayout
-                android:id="@+id/recipe_main"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
-
-                <TextView
-                    android:id="@+id/recipe_title"
-                    android:layout_width="fill_parent"
-                    android:layout_height="wrap_content"
-                    android:background="@drawable/gradient"
-                    android:padding="3dp"
-                    android:text="@string/recipe_title"
-                    android:textColor="#ffc"
-                    android:textSize="24sp" />
-
-                <LinearLayout
-                    android:id="@+id/recipe_parent"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" >
-                </LinearLayout>
-            </LinearLayout>
-            
-            
         </LinearLayout>
     </ScrollView>
 
