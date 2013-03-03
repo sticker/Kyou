@@ -45,6 +45,9 @@ public class DownloadChecker extends IntentService {
 			if (target == Constants.REQ_CODE_RECIPE) {
 				checkRecipe();
 			}
+			if (target == Constants.REQ_CODE_TENKI) {
+				checkTenki();
+			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -145,11 +148,38 @@ public class DownloadChecker extends IntentService {
 					image_check = false;
 				}
 			}
+			
+			if (!FileUtil.isExists(Constants.FILE_MERRY)) {
+				check = false;
+				continue;
+			} else {
+				check = true;
+			}
+			
 			check = image_check;
 		}
 
 		Log.d("checkDokujo","check finish");
 		sendBroadcast(Constants.REQ_CODE_DOKUJO);
+	}
+	
+	private void checkTenki() {
+		
+		Log.d("checkTenki","check start");
+		
+		boolean check = false;
+		while (!check) {
+
+			if (!FileUtil.isExists(Constants.FILE_TENKI)) {
+				check = false;
+				continue;
+			} else {
+				check = true;
+			}
+		}
+
+		Log.d("checkTenki","check finish");
+		sendBroadcast(Constants.REQ_CODE_TENKI);
 	}
 
 	protected void sendBroadcast(int target_result) {

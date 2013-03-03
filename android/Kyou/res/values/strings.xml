@@ -2,6 +2,7 @@
 <resources>
 
     <string name="app_name">Kyou</string>
+    <string name="menu_setting">設定</string>
     <string name="menu_refresh">最新情報表示</string>
     <string name="menu_autoon">自動更新ON</string>
     <string name="menu_autooff">自動更新OFF</string>
@@ -9,9 +10,15 @@
     <string name="btn_download">Download</string>
     <string name="btn_update">Update!</string>
     
+    <string name="tenki_title">天気</string>
     <string name="meigen_title">ポジティブ名言</string>
     <string name="girlmen_title">注目ガール &amp; おしゃれ男子</string>
     <string name="dokujo_title">注目ニュース</string>
     <string name="recipe_title">注目レシピ</string>
+    
+    
+    <string name="setting_parent">設定</string>
+    <string name="setting_area">地域の設定</string>
+    <string name="setting_area_dialog">地域を選択してください</string>
 
 </resources>

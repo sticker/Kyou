@@ -4,7 +4,7 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity" >
 
-<!--  
+    <!--
     <Button
         android:id="@+id/btn_download"
         android:layout_width="wrap_content"
@@ -21,19 +21,64 @@
         android:layout_alignParentTop="true"
         android:layout_toRightOf="@+id/btn_download"
         android:text="@string/btn_update" />
--->
+    -->
 
+    <LinearLayout
+        android:id="@+id/top"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
+
+        <LinearLayout
+            android:id="@+id/top_horizontal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <TextView
+                android:id="@+id/top_date"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:padding="3dp" />
+
+            <LinearLayout
+                android:id="@+id/top_parent"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <!-- ここからスクロール -->
     <ScrollView
         android:id="@+id/all_scroll"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:layout_alignParentLeft="true" >
+        android:layout_alignParentLeft="true" 
+        android:layout_below="@+id/top">
 
         <LinearLayout
             android:id="@+id/all_main"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical" >
+
+            <!-- 天気 -->
+
+            <LinearLayout
+                android:id="@+id/tenki_main"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical" >
+
+                <LinearLayout
+                    android:id="@+id/tenki_parent"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical" >
+                </LinearLayout>
+            </LinearLayout>
 
             <!-- ポジティブ名言 -->
 

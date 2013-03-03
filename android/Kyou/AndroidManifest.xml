@@ -43,6 +43,7 @@
         </activity>
         <activity android:name=".RecipeDownloadActivity" >
         </activity>
+        <activity android:name=".MyPreferenceActivity"></activity>
         <activity android:name="com.google.ads.AdActivity" 
             android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize">
         </activity>

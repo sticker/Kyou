@@ -21,7 +21,7 @@ public class MatomeDownload {
 
 	/*-----------------------------------------------------------------------*/
 
-	public boolean execute() {
+	public static boolean execute() {
 		try {
 			// TODO ディレクトリ作成
 			// SD カード/パッケージ名 ディレクトリ生成

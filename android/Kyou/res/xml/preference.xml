@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <PreferenceScreen
+        android:key="@string/menu_setting"
+        android:summary="PreferenceScreen要約"
+        android:title="地域" >
+
+        <ListPreference
+            android:key="prefecture"
+            android:summary=""
+            android:title="タイトル" >
+        </ListPreference>
+    </PreferenceScreen>
+
+</PreferenceScreen>

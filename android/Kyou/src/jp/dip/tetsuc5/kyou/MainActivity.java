@@ -1,16 +1,25 @@
 package jp.dip.tetsuc5.kyou;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import jp.dip.tetsuc5.kyou.bean.Dokujo;
 import jp.dip.tetsuc5.kyou.bean.Girlmen;
 import jp.dip.tetsuc5.kyou.bean.Matome;
 import jp.dip.tetsuc5.kyou.bean.Meigen;
+import jp.dip.tetsuc5.kyou.bean.Merry;
 import jp.dip.tetsuc5.kyou.bean.Recipe;
+import jp.dip.tetsuc5.kyou.bean.Tenki;
 import jp.dip.tetsuc5.kyou.logic.DokujoDownload;
 import jp.dip.tetsuc5.kyou.logic.GirlmenDownload;
 import jp.dip.tetsuc5.kyou.logic.MatomeDownload;
+import jp.dip.tetsuc5.kyou.logic.MerryDownload;
 import jp.dip.tetsuc5.kyou.logic.RecipeDownload;
+import jp.dip.tetsuc5.kyou.logic.TenkiDownload;
 import jp.dip.tetsuc5.kyou.util.Constants;
 import jp.dip.tetsuc5.kyou.util.FileUtil;
 import jp.dip.tetsuc5.kyou.util.MyAsyncHttpClient;
@@ -49,21 +58,16 @@ public class MainActivity extends BaseActivity {
 	DownloadProgressBroadcastReceiver progressReceiver;
 	IntentFilter intentFilter;
 
-	DokujoDownload dokujoDownload = new DokujoDownload();
-	GirlmenDownload girlmenDownload = new GirlmenDownload();
-	MatomeDownload matomeDownload = new MatomeDownload();
-	RecipeDownload recipeDownload = new RecipeDownload();
-
 	private AdView adView;
-//	private Button btn_download;
-//	private Button btn_update;
+	// private Button btn_download;
+	// private Button btn_update;
 	private float _rate;
 	private float _scale;
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		
+
 		setContentView(R.layout.activity_main);
 
 		registerDownloadBroadcastReceiver();
@@ -76,6 +80,22 @@ public class MainActivity extends BaseActivity {
 		_rate = (float) _bm.getHeight() / (float) _bm.getWidth();
 		_scale = (float) _w / (float) _bm.getWidth();
 
+		//トップ行の設定
+		TextView top_date = (TextView)findViewById(R.id.top_date);
+		Date date = new Date();
+		DateFormat df = new SimpleDateFormat("MM/dd(E)", Locale.JAPAN);
+		String dateString = df.format(date);
+		if(dateString.startsWith("0")) dateString = dateString.substring(1);
+		dateString = dateString.replace("/0", "/");
+		top_date.setText(dateString);
+		top_date.setTextSize(Constants.TEXTSIZE_TOPDATE * _scale);
+		
+		// フォント設定
+		Typeface face = Typeface.createFromAsset(getAssets(),
+				Constants.FONT_TOPDATE);
+		top_date.setTypeface(face);
+		
+		
 		// 見出し行の設定
 		Drawable title_img = getResources().getDrawable(R.drawable.nico);
 		title_img.setBounds(0, 0, Constants.IMAGESIZE_TITLE,
@@ -89,16 +109,16 @@ public class MainActivity extends BaseActivity {
 		title = (TextView) findViewById(R.id.recipe_title);
 		title.setCompoundDrawables(title_img, null, null, null);
 
-//		btn_download = (Button) findViewById(R.id.btn_download);
-//		btn_update = (Button) findViewById(R.id.btn_update);
-//
-//		btn_download.setOnClickListener(this);
-//		btn_update.setOnClickListener(this);
+		// btn_download = (Button) findViewById(R.id.btn_download);
+		// btn_update = (Button) findViewById(R.id.btn_update);
+		//
+		// btn_download.setOnClickListener(this);
+		// btn_update.setOnClickListener(this);
 
 		// JSONファイルが存在したら注目ガール・男子取得
 		// 存在しなければまずダウンロード
 		if (!FileUtil.isExists(Constants.FILE_GIRLMEN)) {
-			if (girlmenDownload.execute()) {
+			if (GirlmenDownload.execute()) {
 				Intent intent = new Intent(this, DownloadChecker.class);
 				intent.putExtra("target", Constants.REQ_CODE_GIRLMEN);
 				startService(intent);
@@ -119,18 +139,27 @@ public class MainActivity extends BaseActivity {
 		// 存在しなければまずダウンロード
 		if (!FileUtil.isExists(Constants.FILE_DOKUJO)) {
 
-			if (dokujoDownload.execute()) {
-				MatomeDownload matomeDownload = new MatomeDownload();
-				if (matomeDownload.execute()) {
-					Intent intent = new Intent(this, DownloadChecker.class);
-					intent.putExtra("target", Constants.REQ_CODE_DOKUJO);
-					startService(intent);
+			if (DokujoDownload.execute()) {
+				if (MatomeDownload.execute()) {
+					if (MerryDownload.execute()) {
+						Intent intent = new Intent(this, DownloadChecker.class);
+						intent.putExtra("target", Constants.REQ_CODE_DOKUJO);
+						startService(intent);
+					}
 				}
 			}
 
 		} else if (!FileUtil.isExists(Constants.FILE_MATOME)) {
 
-			if (matomeDownload.execute()) {
+			if (MatomeDownload.execute()) {
+				if (MerryDownload.execute()) {
+					Intent intent = new Intent(this, DownloadChecker.class);
+					intent.putExtra("target", Constants.REQ_CODE_DOKUJO);
+					startService(intent);
+				}
+			}
+		} else if (!FileUtil.isExists(Constants.FILE_MERRY)) {
+			if (MerryDownload.execute()) {
 				Intent intent = new Intent(this, DownloadChecker.class);
 				intent.putExtra("target", Constants.REQ_CODE_DOKUJO);
 				startService(intent);
@@ -148,7 +177,7 @@ public class MainActivity extends BaseActivity {
 		// JSONファイルが存在したらつぶやきレシピ取得
 		// 存在しなければまずダウンロード
 		if (!FileUtil.isExists(Constants.FILE_RECIPE)) {
-			if (recipeDownload.execute()) {
+			if (RecipeDownload.execute()) {
 				Intent intent = new Intent(getBaseContext(),
 						DownloadChecker.class);
 				intent.putExtra("target", Constants.REQ_CODE_RECIPE);
@@ -164,6 +193,26 @@ public class MainActivity extends BaseActivity {
 				Log.d("KyouDebug:", "printRecipe false");
 			}
 		}
+		
+		// JSONファイルが存在したら天気取得
+				// 存在しなければまずダウンロード
+				if (!FileUtil.isExists(Constants.FILE_TENKI)) {
+					if (TenkiDownload.execute()) {
+						Intent intent = new Intent(getBaseContext(),
+								DownloadChecker.class);
+						intent.putExtra("target", Constants.REQ_CODE_TENKI);
+						startService(intent);
+					}
+				} else {
+
+					if (printTenki()) {
+						// 成功
+						Log.d("KyouDebug:", "printTenki success");
+					} else {
+						// 失敗
+						Log.d("KyouDebug:", "printTenki false");
+					}
+				}
 
 		// 名言取得
 		if (printMeigen()) {
@@ -175,33 +224,33 @@ public class MainActivity extends BaseActivity {
 		}
 	}
 
-//	@Override
-//	public void onClick(View v) {
-//		if (v == btn_download) {
-//			// DokujoDownload dokujoDownload = new DokujoDownload();
-//			// dokujoDownload.execute();
-//			//
-//			// GirlmenDownload girlmenDownload = new GirlmenDownload();
-//			// girlmenDownload.execute();
-//			//
-//			// MatomeDownload matomeDownload = new MatomeDownload();
-//			// matomeDownload.execute();
-//			//
-//			// RecipeDownload recipeDownload = new RecipeDownload();
-//			// recipeDownload.execute();
-//
-//			new DownloadDaemon().startResident(this);
-//
-//		}
-//		if (v == btn_update) {
-//			printGirlmen();
-//			printDokujo();
-//			printMeigen();
-//			printRecipe();
-//
-//			DownloadDaemon.stopResidentIfActive(this);
-//		}
-//	}
+	// @Override
+	// public void onClick(View v) {
+	// if (v == btn_download) {
+	// // DokujoDownload DokujoDownload = new DokujoDownload();
+	// // DokujoDownload.execute();
+	// //
+	// // GirlmenDownload girlmenDownload = new GirlmenDownload();
+	// // girlmenDownload.execute();
+	// //
+	// // MatomeDownload matomeDownload = new MatomeDownload();
+	// // matomeDownload.execute();
+	// //
+	// // RecipeDownload recipeDownload = new RecipeDownload();
+	// // recipeDownload.execute();
+	//
+	// new DownloadDaemon().startResident(this);
+	//
+	// }
+	// if (v == btn_update) {
+	// printGirlmen();
+	// printDokujo();
+	// printMeigen();
+	// printRecipe();
+	//
+	// DownloadDaemon.stopResidentIfActive(this);
+	// }
+	// }
 
 	@Override
 	public boolean onCreateOptionsMenu(Menu menu) {
@@ -214,6 +263,11 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public boolean onOptionsItemSelected(MenuItem item) {
 		switch (item.getItemId()) {
+		case R.id.menu_setting:
+			Intent i = new Intent(getApplicationContext(),
+					MyPreferenceActivity.class);
+			startActivity(i);
+			return true;
 		case R.id.menu_refresh:
 			refresh();
 			return true;
@@ -232,34 +286,37 @@ public class MainActivity extends BaseActivity {
 	@Override
 	public void onDestroy() {
 		unregisterReceiver(progressReceiver);
-		adView.destroy();
+		if(adView != null) adView.destroy();
 		super.onDestroy();
 	}
 
-	
-	
-	
-	
 	public void refresh() {
 
-		if (girlmenDownload.execute()) {
+		if (GirlmenDownload.execute()) {
 			Intent intent = new Intent(this, DownloadChecker.class);
 			intent.putExtra("target", Constants.REQ_CODE_GIRLMEN);
 			startService(intent);
 		}
 
-		if (dokujoDownload.execute()) {
-			MatomeDownload matomeDownload = new MatomeDownload();
-			if (matomeDownload.execute()) {
-				Intent intent = new Intent(this, DownloadChecker.class);
-				intent.putExtra("target", Constants.REQ_CODE_DOKUJO);
-				startService(intent);
+		if (DokujoDownload.execute()) {
+			if (MatomeDownload.execute()) {
+				if (MerryDownload.execute()) {
+					Intent intent = new Intent(this, DownloadChecker.class);
+					intent.putExtra("target", Constants.REQ_CODE_DOKUJO);
+					startService(intent);
+				}
 			}
 		}
 
-		if (recipeDownload.execute()) {
+		if (RecipeDownload.execute()) {
 			Intent intent = new Intent(getBaseContext(), DownloadChecker.class);
 			intent.putExtra("target", Constants.REQ_CODE_RECIPE);
+			startService(intent);
+		}
+		
+		if (TenkiDownload.execute()) {
+			Intent intent = new Intent(getBaseContext(), DownloadChecker.class);
+			intent.putExtra("target", Constants.REQ_CODE_TENKI);
 			startService(intent);
 		}
 
@@ -304,7 +361,7 @@ public class MainActivity extends BaseActivity {
 
 						// フォント設定
 						Typeface face = Typeface.createFromAsset(getAssets(),
-								"uzura.ttf");
+								Constants.FONT_MEIGEN);
 						tv.setTypeface(face);
 						tv.setTextSize(Constants.TEXTSIZE_MEIGEN * _scale);
 
@@ -406,6 +463,7 @@ public class MainActivity extends BaseActivity {
 		try {
 			List<Dokujo> dokujoList = Dokujo.read(Constants.FILE_DOKUJO);
 			List<Matome> matomeList = Matome.read(Constants.FILE_MATOME);
+			List<Merry> merryList = Merry.read(Constants.FILE_MERRY);
 
 			// if (dokujoList == null) {
 			// Intent i = new Intent(getApplicationContext(),
@@ -493,11 +551,38 @@ public class MainActivity extends BaseActivity {
 				tv.setContentDescription(matome.getUrl());
 				layout.addView(tv);
 			}
-			
+
+			// Merryニュース表示
+			for (Merry merry : merryList) {
+
+				Log.d("KyouDebug", merry.getTitle() + "【Merryニュース】");
+
+				// TextView追加
+				TextView tv = (TextView) getLayoutInflater().inflate(
+						R.layout.dokujo, null);
+				tv.setText(merry.getTitle());
+
+				Drawable merry_img = getResources().getDrawable(
+						R.drawable.merry_head);
+				merry_img.setBounds(0, 0, Constants.IMAGESIZE_DOKUJO,
+						Constants.IMAGESIZE_DOKUJO);
+
+				Drawable merry_site_img = getResources().getDrawable(
+						R.drawable.merry);
+				merry_site_img.setBounds(0, 0, Constants.IMAGESIZE_DOKUJO,
+						Constants.IMAGESIZE_DOKUJO);
+
+				tv.setCompoundDrawables(merry_img, null, merry_site_img, null);
+
+				// Linkつける
+				tv.setContentDescription(merry.getUrl());
+				layout.addView(tv);
+			}
+
 			adView = new AdView(this, AdSize.BANNER, Constants.ID_ADMOB);
 			layout.addView(adView);
 			AdRequest adRequest = new AdRequest();
-			adRequest.addTestDevice("CB511WWX9M");                      // Android 端末をテスト
+			adRequest.addTestDevice("CB511WWX9M"); // Android 端末をテスト
 			adView.loadAd(adRequest);
 
 			return true;
@@ -559,6 +644,45 @@ public class MainActivity extends BaseActivity {
 			return false;
 		}
 	}
+	
+	// /**********************************************************
+	// 天気
+	// /**********************************************************
+	public boolean printTenki() {
+
+		try {
+			List<Tenki> tenkiList = Tenki.read(Constants.FILE_TENKI);
+
+			LinearLayout layout;
+			layout = (LinearLayout) findViewById(R.id.top_parent);
+			if (layout.getChildCount() > 0) {// 子Viewが存在する場合
+				layout.removeAllViews();// 動的に削除する。
+			}
+
+			for (Tenki tenki : tenkiList) {
+
+				//晴れの時だけ表示する
+//				if ("晴れ".equals(tenki.getTelop())) {
+					Log.d("KyouDebug", tenki.getDate() + ":" + tenki.getTelop());
+
+					// TextView追加
+					TextView tv = (TextView) getLayoutInflater().inflate(
+							R.layout.tenki, null);
+					tv.setText(tenki.getDateLabel() + "は" + tenki.getTelop() + " !!");
+
+					// Linkつける
+//					tv.setContentDescription(tenki.getUrl());
+					
+					layout.addView(tv);
+//				}
+			}
+
+			return true;
+		} catch (Exception e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
 
 	protected void registerDownloadBroadcastReceiver() {
 		progressReceiver = new DownloadProgressBroadcastReceiver();
@@ -582,6 +706,9 @@ public class MainActivity extends BaseActivity {
 			}
 			if (target_result == Constants.REQ_CODE_RECIPE) {
 				printRecipe();
+			}
+			if (target_result == Constants.REQ_CODE_TENKI) {
+				printTenki();
 			}
 
 		}

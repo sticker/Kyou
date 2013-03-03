@@ -21,7 +21,7 @@ public class DokujoDownload {
 
 	/*-----------------------------------------------------------------------*/
 
-	public boolean execute(){
+	public static boolean execute(){
 		
 		try {
 			// TODO ディレクトリ作成

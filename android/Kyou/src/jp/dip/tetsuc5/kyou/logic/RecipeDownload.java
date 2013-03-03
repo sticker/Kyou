@@ -18,7 +18,7 @@ public class RecipeDownload {
 
 	/*-----------------------------------------------------------------------*/
 
-	public boolean execute() {
+	public static boolean execute() {
 		
 		try {
 			// TODO ディレクトリ作成

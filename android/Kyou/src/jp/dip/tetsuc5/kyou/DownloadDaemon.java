@@ -6,6 +6,8 @@ import jp.dip.tetsuc5.kyou.logic.DokujoDownload;
 import jp.dip.tetsuc5.kyou.logic.GirlmenDownload;
 import jp.dip.tetsuc5.kyou.logic.MatomeDownload;
 import jp.dip.tetsuc5.kyou.logic.RecipeDownload;
+import jp.dip.tetsuc5.kyou.logic.TenkiAreaDownload;
+import jp.dip.tetsuc5.kyou.logic.TenkiDownload;
 import android.content.Context;
 
 /**
@@ -19,11 +21,6 @@ public class DownloadDaemon extends BaseDownloadDaemon {
 	// 画面から常駐を解除したい場合のために，常駐インスタンスを保持
 	public static BaseDownloadDaemon activeService;
 
-	public DokujoDownload dokujoDownload = new DokujoDownload();
-	public GirlmenDownload girlmenDownload = new GirlmenDownload();
-	public MatomeDownload matomeDownload = new MatomeDownload();
-	public RecipeDownload recipeDownload = new RecipeDownload();
-
 	@Override
 	protected long getIntervalMS() {
 		return 1000 * 10;
@@ -36,10 +33,14 @@ public class DownloadDaemon extends BaseDownloadDaemon {
 		// ※もし毎回の処理が重い場合は，メインスレッドを妨害しないために
 		// ここから下を別スレッドで実行する。
 
-		dokujoDownload.execute();
-		girlmenDownload.execute();
-		matomeDownload.execute();
-		recipeDownload.execute();
+		DokujoDownload.execute();
+		GirlmenDownload.execute();
+		MatomeDownload.execute();
+		RecipeDownload.execute();
+		
+		TenkiAreaDownload.execute();
+		TenkiDownload.execute();
+		
 		
 		// 次回の実行について計画を立てる
 		makeNextPlan();
@@ -51,10 +52,10 @@ public class DownloadDaemon extends BaseDownloadDaemon {
 		long now = System.currentTimeMillis();
 		Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(now);
-//        cal.add(Calendar.DATE, 1); //翌日
-//        cal.set(Calendar.HOUR_OF_DAY, 4); //4時
-//        cal.set(Calendar.MINUTE, 0);
-        cal.add(Calendar.MINUTE, 5);
+        cal.add(Calendar.DATE, 1); //翌日
+        cal.set(Calendar.HOUR_OF_DAY, 4); //4時
+        cal.set(Calendar.MINUTE, 0);
+//        cal.add(Calendar.MINUTE, 5);
         cal.set(Calendar.SECOND, 0);
 		this.scheduleNextTime(cal);
 	}
